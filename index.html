@@ -139,7 +139,7 @@
 
   <script>
     // Si cambia el enlace compartido, actualizalo aquí.
-    const DATA_URL = "https://dl.dropbox.com/scl/fi/lcvxvpa37thl53uqda5r5/origenes.json?rlkey=7kkrhmno4lfmjq86kl7hx8884&dl=1";
+    const DATA_URL = "/api/origenes";
 
     const columns = [
       { key: "codigo", label: "Código" },
@@ -252,7 +252,7 @@
 
       try {
         const response = await fetch(DATA_URL, { cache: "no-store" });
-        if (!response.ok) throw new Error("Dropbox respondió con estado " + response.status + ".");
+        if (!response.ok) throw new Error("El servicio respondió con estado " + response.status + ".");
         const data = await response.json();
         if (!Array.isArray(data)) throw new Error("El JSON no tiene el formato esperado: se esperaba una lista de registros.");
         const nombresExcluir = new Set([
@@ -273,9 +273,9 @@
       } catch (error) {
         count.textContent = "No se pudieron cargar los datos";
         content.innerHTML =
-          '<div class="error"><strong>Error al cargar el JSON</strong>' +
+          '<div class="error"><strong>Error al cargar los datos</strong>' +
           escapeHtml(error.message || "Error de conexión.") +
-          '<br>Si la consola del navegador indica un bloqueo CORS, el enlace de Dropbox no permite esta lectura desde GitHub Pages. En ese caso habrá que publicar el JSON en el mismo repositorio o usar un origen que permita CORS.</div>';
+          '<br>Revisá que la función de Cloudflare esté desplegada y que el enlace de origen siga disponible.</div>';
       } finally {
         refresh.disabled = false;
         refresh.textContent = "↻ Actualizar datos";
