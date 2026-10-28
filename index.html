@@ -1,0 +1,253 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#123c36">
+  <title>Orígenes | LOGMA</title>
+  <style>
+    :root {
+      color-scheme: light;
+      --ink: #172b27;
+      --muted: #64736f;
+      --line: #e1e9e5;
+      --paper: #ffffff;
+      --canvas: #f3f7f5;
+      --green: #176b55;
+      --green-dark: #123c36;
+      --green-pale: #e8f4ee;
+      --shadow: 0 14px 40px rgba(19, 50, 42, .08);
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      background: var(--canvas);
+      color: var(--ink);
+      font: 15px/1.5 Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+    }
+    .topbar {
+      background: var(--green-dark);
+      color: #fff;
+      padding: 22px clamp(18px, 4vw, 56px);
+    }
+    .topbar-inner, main { max-width: 1500px; margin: 0 auto; }
+    .brand { display: flex; align-items: center; gap: 13px; }
+    .brand-mark {
+      display: grid; place-items: center; width: 40px; height: 40px;
+      border: 1px solid rgba(255,255,255,.3); border-radius: 12px;
+      color: #bde6d2; font-size: 20px; font-weight: 800;
+    }
+    .brand-name { font-size: 15px; font-weight: 750; letter-spacing: .08em; }
+    .brand-sub { color: #c7d9d3; font-size: 12px; margin-top: 2px; }
+    main { padding: 34px clamp(16px, 3vw, 40px) 48px; }
+    .heading {
+      display: flex; align-items: end; justify-content: space-between;
+      gap: 20px; margin-bottom: 22px;
+    }
+    h1 { font-size: clamp(27px, 3vw, 38px); line-height: 1.15; letter-spacing: -.04em; margin: 0; }
+    .subtitle { color: var(--muted); margin: 8px 0 0; }
+    .actions { display: flex; align-items: center; gap: 10px; }
+    button {
+      border: 0; border-radius: 10px; background: var(--green); color: white;
+      padding: 11px 15px; font: inherit; font-weight: 700; cursor: pointer;
+      box-shadow: 0 4px 10px rgba(23,107,85,.15);
+    }
+    button:hover { background: #105b47; }
+    button:disabled { opacity: .65; cursor: wait; }
+    .panel {
+      overflow: hidden; background: var(--paper); border: 1px solid var(--line);
+      border-radius: 16px; box-shadow: var(--shadow);
+    }
+    .toolbar {
+      display: flex; justify-content: space-between; align-items: center;
+      gap: 16px; padding: 16px 18px; border-bottom: 1px solid var(--line);
+    }
+    .search-wrap { position: relative; flex: 1; max-width: 460px; }
+    .search-icon { position: absolute; left: 13px; top: 50%; transform: translateY(-50%); color: #81908b; }
+    input {
+      width: 100%; border: 1px solid var(--line); border-radius: 10px;
+      background: #fbfdfc; padding: 11px 13px 11px 38px; color: var(--ink);
+      font: inherit; outline: none;
+    }
+    input:focus { border-color: #82b9a4; box-shadow: 0 0 0 3px rgba(23,107,85,.1); }
+    .count { color: var(--muted); font-size: 13px; white-space: nowrap; }
+    .table-wrap { overflow: auto; max-height: calc(100vh - 310px); min-height: 240px; }
+    table { width: 100%; border-collapse: separate; border-spacing: 0; font-size: 13px; }
+    th {
+      position: sticky; top: 0; z-index: 1; text-align: left; white-space: nowrap;
+      background: #f7faf8; color: #51635d; padding: 12px 13px;
+      border-bottom: 1px solid var(--line); font-size: 11px; letter-spacing: .045em;
+      text-transform: uppercase;
+    }
+    td { padding: 11px 13px; border-bottom: 1px solid #edf1ef; vertical-align: top; }
+    tbody tr:hover { background: #f8fbf9; }
+    td:first-child { color: var(--green-dark); font-weight: 750; font-variant-numeric: tabular-nums; }
+    .badge {
+      display: inline-flex; align-items: center; gap: 6px; padding: 3px 9px;
+      border-radius: 999px; background: var(--green-pale); color: #176047;
+      font-size: 11px; font-weight: 750; white-space: nowrap;
+    }
+    .badge::before { content: ""; width: 6px; height: 6px; border-radius: 50%; background: currentColor; }
+    .badge.off { background: #f0f2f1; color: #76817d; }
+    .empty { text-align: center; color: var(--muted); padding: 44px 18px; }
+    .error {
+      margin: 18px; border: 1px solid #f0c7c3; border-radius: 12px;
+      background: #fff6f5; color: #87362e; padding: 15px 16px;
+    }
+    .error strong { display: block; margin-bottom: 4px; }
+    .footer { color: var(--muted); font-size: 12px; padding: 12px 18px; }
+    @media (max-width: 760px) {
+      .heading { align-items: start; flex-direction: column; }
+      .toolbar { align-items: stretch; flex-direction: column; }
+      .search-wrap { max-width: none; }
+      .table-wrap { max-height: calc(100vh - 360px); }
+    }
+  </style>
+</head>
+<body>
+  <header class="topbar">
+    <div class="topbar-inner brand">
+      <div class="brand-mark" aria-hidden="true">O</div>
+      <div>
+        <div class="brand-name">LOGMA</div>
+        <div class="brand-sub">Directorio de orígenes</div>
+      </div>
+    </div>
+  </header>
+
+  <main>
+    <section class="heading">
+      <div>
+        <h1>Orígenes</h1>
+        <p class="subtitle">Consulta y búsqueda de orígenes registrados.</p>
+      </div>
+      <div class="actions">
+        <button id="refresh" type="button">↻ Actualizar datos</button>
+      </div>
+    </section>
+
+    <section class="panel" aria-label="Tabla de orígenes">
+      <div class="toolbar">
+        <label class="search-wrap">
+          <span class="search-icon" aria-hidden="true">⌕</span>
+          <input id="search" type="search" placeholder="Buscar por nombre, empresa, código…" autocomplete="off">
+        </label>
+        <div id="count" class="count" aria-live="polite">Cargando datos…</div>
+      </div>
+      <div id="content" class="table-wrap" role="region" aria-live="polite" aria-label="Orígenes" tabindex="0"></div>
+      <div class="footer">Los datos se cargan desde el archivo JSON compartido.</div>
+    </section>
+  </main>
+
+  <script>
+    // Si cambia el enlace compartido, actualizalo aquí.
+    const DATA_URL = "https://dl.dropbox.com/scl/fi/lcvxvpa37thl53uqda5r5/origenes.json?rlkey=7kkrhmno4lfmjq86kl7hx8884&dl=1";
+
+    const columns = [
+      { key: "codigo", label: "Código" },
+      { key: "nombre", label: "Nombre" },
+      { key: "empresa", label: "Empresa" },
+      { key: "codigo_gis", label: "Código GIS" },
+      { key: "nombre_fas", label: "Nombre FAS" },
+      { key: "paga_flete", label: "Paga flete" },
+      { key: "estado", label: "Estado" },
+      { key: "activo", label: "Activo" },
+      { key: "fecha_modificacion", label: "Fecha modificación" },
+      { key: "tipo_de_origen", label: "Tipo de origen" },
+      { key: "Tipo de Producto", label: "Tipo de producto" },
+      { key: "Categoría Certificación", label: "Categoría certificación" },
+      { key: "Codigo Proveedor", label: "Código proveedor" },
+      { key: "Proveedor/Fondo", label: "Proveedor/Fondo" }
+    ];
+
+    let records = [];
+    const content = document.getElementById("content");
+    const count = document.getElementById("count");
+    const search = document.getElementById("search");
+    const refresh = document.getElementById("refresh");
+
+    function escapeHtml(value) {
+      return String(value).replace(/[&<>"']/g, char => ({
+        "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;"
+      })[char]);
+    }
+
+    function displayValue(key, value) {
+      if (value === null || value === undefined || value === "") return "—";
+      if (key === "fecha_modificacion") {
+        const parsed = new Date(String(value).replace(" ", "T"));
+        if (!Number.isNaN(parsed.getTime())) {
+          return parsed.toLocaleString("es-UY", {
+            timeZone: "America/Montevideo",
+            year: "numeric", month: "2-digit", day: "2-digit",
+            hour: "2-digit", minute: "2-digit"
+          });
+        }
+      }
+      return String(value);
+    }
+
+    function render() {
+      const query = search.value.trim().toLocaleLowerCase("es-UY");
+      const filtered = records.filter(row => columns.some(column =>
+        String(row[column.key] ?? "").toLocaleLowerCase("es-UY").includes(query)
+      ));
+
+      count.textContent = query
+        ? filtered.length.toLocaleString("es-UY") + " de " + records.length.toLocaleString("es-UY") + " orígenes"
+        : records.length.toLocaleString("es-UY") + (records.length === 1 ? " origen" : " orígenes");
+
+      if (!filtered.length) {
+        content.innerHTML = '<div class="empty">No hay orígenes que coincidan con la búsqueda.</div>';
+        return;
+      }
+
+      const head = columns.map(column => "<th scope=\"col\">" + escapeHtml(column.label) + "</th>").join("");
+      const body = filtered.map(row => {
+        const cells = columns.map(column => {
+          const value = row[column.key];
+          const text = displayValue(column.key, value);
+          if (column.key === "activo" && value !== null && value !== undefined && value !== "") {
+            const active = String(value).trim().toLocaleLowerCase("es-UY");
+            const isOff = ["no", "false", "0", "inactivo"].includes(active);
+            return '<td><span class="badge' + (isOff ? " off" : "") + '">' + escapeHtml(text) + "</span></td>";
+          }
+          return "<td>" + escapeHtml(text) + "</td>";
+        }).join("");
+        return "<tr>" + cells + "</tr>";
+      }).join("");
+
+      content.innerHTML = "<table><thead><tr>" + head + "</tr></thead><tbody>" + body + "</tbody></table>";
+    }
+
+    async function loadData() {
+      refresh.disabled = true;
+      refresh.textContent = "Cargando…";
+      count.textContent = "Cargando datos…";
+      content.innerHTML = '<div class="empty">Conectando con el archivo JSON…</div>';
+
+      try {
+        const response = await fetch(DATA_URL, { cache: "no-store" });
+        if (!response.ok) throw new Error("Dropbox respondió con estado " + response.status + ".");
+        const data = await response.json();
+        if (!Array.isArray(data)) throw new Error("El JSON no tiene el formato esperado: se esperaba una lista de registros.");
+        records = data;
+        render();
+      } catch (error) {
+        count.textContent = "No se pudieron cargar los datos";
+        content.innerHTML =
+          '<div class="error"><strong>Error al cargar el JSON</strong>' +
+          escapeHtml(error.message || "Error de conexión.") +
+          '<br>Si la consola del navegador indica un bloqueo CORS, el enlace de Dropbox no permite esta lectura desde GitHub Pages. En ese caso habrá que publicar el JSON en el mismo repositorio o usar un origen que permita CORS.</div>';
+      } finally {
+        refresh.disabled = false;
+        refresh.textContent = "↻ Actualizar datos";
+      }
+    }
+
+    search.addEventListener("input", render);
+    refresh.addEventListener("click", loadData);
+    loadData();
+  </script>
+</body>
+</html>
