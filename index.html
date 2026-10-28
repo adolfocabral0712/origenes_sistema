@@ -126,7 +126,7 @@
     <section class="heading">
       <div>
         <h1>Orígenes</h1>
-        <p class="subtitle">Consulta y búsqueda de orígenes registrados.</p>
+        <p class="subtitle">Orígenes tipo M, ordenados por código de mayor a menor.</p>
       </div>
       <div class="actions">
         <button id="refresh" type="button">↻ Actualizar datos</button>
@@ -238,7 +238,14 @@
         if (!response.ok) throw new Error("Dropbox respondió con estado " + response.status + ".");
         const data = await response.json();
         if (!Array.isArray(data)) throw new Error("El JSON no tiene el formato esperado: se esperaba una lista de registros.");
-        records = data;
+        records = data
+          .filter(row => String(row["tipo_de_origen"] ?? "").trim().toLocaleUpperCase("es-UY") === "M")
+          .sort((a, b) => {
+            const codigoA = Number(a.codigo);
+            const codigoB = Number(b.codigo);
+            if (Number.isFinite(codigoA) && Number.isFinite(codigoB)) return codigoB - codigoA;
+            return String(b.codigo ?? "").localeCompare(String(a.codigo ?? ""), "es-UY", { numeric: true, sensitivity: "base" });
+          });
         render();
       } catch (error) {
         count.textContent = "No se pudieron cargar los datos";
