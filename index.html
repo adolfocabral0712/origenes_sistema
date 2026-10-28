@@ -31,17 +31,10 @@
       padding: 22px clamp(18px, 4vw, 56px);
     }
     .topbar-inner { max-width: 1900px; margin: 0 auto; }
-    .brand { display: flex; align-items: center; gap: 13px; }
-    .brand-mark {
-      display: grid; place-items: center; width: 40px; height: 40px;
-      border: 1px solid rgba(255,255,255,.42); border-radius: 12px;
-      color: #fff; font-size: 20px; font-weight: 800;
-    }
-    .brand-name { font-size: 15px; font-weight: 750; letter-spacing: .08em; }
-    .brand-sub { color: rgba(255,255,255,.86); font-size: 12px; margin-top: 2px; }
+    .topbar-title { margin: 0; color: #fff; font-size: clamp(25px, 3vw, 34px); font-weight: 750; letter-spacing: -.03em; }
     main { max-width: 1900px; width: calc(100% - 32px); margin: 0 auto; padding: 34px clamp(16px, 2vw, 34px) 48px; }
     .heading {
-      display: flex; align-items: end; justify-content: space-between;
+      display: flex; align-items: center; justify-content: flex-end;
       gap: 20px; margin-bottom: 22px;
     }
     h1 { font-size: clamp(27px, 3vw, 38px); line-height: 1.15; letter-spacing: -.04em; margin: 0; }
@@ -115,20 +108,13 @@
 </head>
 <body>
   <header class="topbar">
-    <div class="topbar-inner brand">
-      <div class="brand-mark" aria-hidden="true">O</div>
-      <div>
-        <div class="brand-name">LOGMA</div>
-        <div class="brand-sub">Directorio de orígenes</div>
-      </div>
+    <div class="topbar-inner">
+      <h1 class="topbar-title">Orígenes</h1>
     </div>
   </header>
 
   <main>
     <section class="heading">
-      <div>
-        <h1>Orígenes</h1>
-      </div>
       <div class="actions">
         <button id="refresh" type="button">↻ Actualizar datos</button>
       </div>
@@ -146,7 +132,7 @@
         </div>
       </div>
       <div id="content" class="table-wrap" role="region" aria-live="polite" aria-label="Orígenes" tabindex="0"></div>
-      <div class="footer">Los datos se cargan desde el archivo JSON compartido.</div>
+      <div class="footer">Información de orígenes del sistema.</div>
     </section>
   </main>
 
@@ -262,7 +248,7 @@
       refresh.disabled = true;
       refresh.textContent = "Cargando…";
       count.textContent = "Cargando datos…";
-      content.innerHTML = '<div class="empty">Conectando con el archivo JSON…</div>';
+      content.innerHTML = '<div class="empty">Conectando con los datos del sistema… Actualizando.</div>';
 
       try {
         const response = await fetch(DATA_URL, { cache: "no-store" });
