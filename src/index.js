@@ -19,7 +19,11 @@ export default {
 
     if (url.pathname === "/api/origenes") {
       if (request.method !== "GET") {
-        return json({ error: "Método no permitido." }, 405, { Allow: "GET" });
+        return json(
+          { error: "Método no permitido." },
+          405,
+          { Allow: "GET" }
+        );
       }
 
       return getOrigenes(env);
@@ -35,7 +39,10 @@ async function getOrigenes(env) {
 
     if (!sourceUrl) {
       return json(
-        { error: "Falta configurar el secret ORIGENES_DROPBOX_URL en Cloudflare." },
+        {
+          error:
+            "Falta configurar el secret ORIGENES_DROPBOX_URL en Cloudflare.",
+        },
         500
       );
     }
@@ -52,25 +59,46 @@ async function getOrigenes(env) {
       );
     }
 
-    const rows = await upstream.json();
+    const payload = await upstream.json();
+
+    // Acepta el formato nuevo { actualizado_en, registros }
+    // y también el formato anterior que era una lista directa.
+    const rows = Array.isArray(payload)
+      ? payload
+      : payload?.registros;
+
+    const actualizadoEn = Array.isArray(payload)
+      ? null
+      : payload?.actualizado_en ?? null;
 
     if (!Array.isArray(rows)) {
       return json(
-        { error: "El archivo de origen no contiene una lista JSON." },
+        {
+          error:
+            "El archivo de origen no contiene una lista de registros válida.",
+        },
         502
       );
     }
 
-    // Devuelve solamente las columnas usadas por la tabla.
+    // Devuelve solamente las columnas que utiliza la tabla.
     const visibleRows = rows.map((row) => {
       const result = {};
+
       for (const field of FIELDS) {
         result[field] = row?.[field] ?? null;
       }
+
       return result;
     });
 
-    return json(visibleRows, 200);
+    return json(
+      {
+        actualizado_en: actualizadoEn,
+        registros: visibleRows,
+      },
+      200
+    );
   } catch (error) {
     const message =
       error instanceof Error
