@@ -138,7 +138,6 @@
   </main>
 
   <script>
-    // Si cambia el enlace compartido, actualizalo aquí.
     const DATA_URL = "/api/origenes";
 
     const columns = [
@@ -223,25 +222,35 @@
         return;
       }
 
-      const head = columns.map(column => "<th scope=\"col\">" + escapeHtml(column.label) + "</th>").join("");
+      const head = columns
+        .map(column => "<th scope=\"col\">" + escapeHtml(column.label) + "</th>")
+        .join("");
+
       const colgroup = measureColumnWidths(filtered)
         .map(width => "<col style=\"width:" + width + "px\">")
         .join("");
+
       const body = filtered.map(row => {
         const cells = columns.map(column => {
           const value = row[column.key];
           const text = displayValue(column.key, value);
+
           if (column.key === "activo" && value !== null && value !== undefined && value !== "") {
             const active = String(value).trim().toLocaleLowerCase("es-UY");
             const isOff = ["no", "false", "0", "inactivo"].includes(active);
             return '<td><span class="badge' + (isOff ? " off" : "") + '">' + escapeHtml(text) + "</span></td>";
           }
+
           return "<td>" + escapeHtml(text) + "</td>";
         }).join("");
+
         return "<tr>" + cells + "</tr>";
       }).join("");
 
-      content.innerHTML = "<table><colgroup>" + colgroup + "</colgroup><thead><tr>" + head + "</tr></thead><tbody>" + body + "</tbody></table>";
+      content.innerHTML =
+        "<table><colgroup>" + colgroup +
+        "</colgroup><thead><tr>" + head +
+        "</tr></thead><tbody>" + body + "</tbody></table>";
     }
 
     async function loadData() {
@@ -252,22 +261,40 @@
 
       try {
         const response = await fetch(DATA_URL, { cache: "no-store" });
-        if (!response.ok) throw new Error("El servicio respondió con estado " + response.status + ".");
+
+        if (!response.ok) {
+          throw new Error("El servicio respondió con estado " + response.status + ".");
+        }
+
         const data = await response.json();
-        if (!Array.isArray(data)) throw new Error("El JSON no tiene el formato esperado: se esperaba una lista de registros.");
+
+        if (!Array.isArray(data)) {
+          throw new Error("El JSON no tiene el formato esperado: se esperaba una lista de registros.");
+        }
+
         const nombresExcluir = new Set([
           "b3r upm el tala tbo 2",
           "sin origen",
           "reflejado sin origen"
         ]);
+
         records = data
           .filter(row => !nombresExcluir.has(String(row.nombre ?? "").trim().toLocaleLowerCase("es-UY")))
           .sort((a, b) => {
             const codigoA = Number(a.codigo);
             const codigoB = Number(b.codigo);
-            if (Number.isFinite(codigoA) && Number.isFinite(codigoB)) return codigoB - codigoA;
-            return String(b.codigo ?? "").localeCompare(String(a.codigo ?? ""), "es-UY", { numeric: true, sensitivity: "base" });
+
+            if (Number.isFinite(codigoA) && Number.isFinite(codigoB)) {
+              return codigoB - codigoA;
+            }
+
+            return String(b.codigo ?? "").localeCompare(
+              String(a.codigo ?? ""),
+              "es-UY",
+              { numeric: true, sensitivity: "base" }
+            );
           });
+
         updatedAt.textContent = "Actualizado: " + formatUpdateTime(new Date());
         render();
       } catch (error) {
